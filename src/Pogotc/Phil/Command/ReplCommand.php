@@ -25,7 +25,7 @@ class ReplCommand extends Command
         $phil = new Phil(new Tokeniser(), new Parser(), new Evaluator(new Scope()));
 
         do {
-            $line = readline("Parser> ");
+            $line = readline("PHIL> ");
             $output->writeln($phil->run($line));
         } while (true);
     }
