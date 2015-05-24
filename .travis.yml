@@ -18,4 +18,3 @@ notifications:
 install: composer update
 script:
   - ./vendor/bin/phpspec run
-  - ./vendor/bin/phpunit tests/Tessitura/Offline
