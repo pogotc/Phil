@@ -5,13 +5,14 @@ namespace Pogotc\Phil;
 class Evaluator
 {
 
+    /**
+     * @var Scope
+     */
     private $scope;
 
-    public function __construct()
+    public function __construct(Scope $scope)
     {
-        $this->scope = array(
-            '+' => function($a, $b) { return array_sum(func_get_args()); }
-        );
+        $this->scope = $scope->getEnvironment();
     }
 
     public function evaluate($ast)

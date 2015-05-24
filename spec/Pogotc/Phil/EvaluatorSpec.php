@@ -3,10 +3,17 @@
 namespace spec\Pogotc\Phil;
 
 use PhpSpec\ObjectBehavior;
+use Pogotc\Phil\Scope;
 use Prophecy\Argument;
 
 class EvaluatorSpec extends ObjectBehavior
 {
+
+    function let()
+    {
+        $this->beConstructedWith(new Scope());
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('Pogotc\Phil\Evaluator');
