@@ -48,7 +48,7 @@ class Parser
         $ast = array();
 
         while (($token = $this->peekNextToken()) !== ')') {
-            if ($token === '' || $token === null) {
+            if ($this->isUnexpectedToken($token)) {
                 throw new \RuntimeException('Syntax error: expected ), got EOF');
             }
             $ast[]= $this->parseNextToken();
@@ -62,5 +62,14 @@ class Parser
             return null;
         }
         return $this->tokenStream[$this->tokenStreamPos];
+    }
+
+    /**
+     * @param $token
+     * @return bool
+     */
+    private function isUnexpectedToken($token)
+    {
+        return $token === '' || $token === null;
     }
 }
