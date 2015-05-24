@@ -5,39 +5,67 @@ namespace Pogotc\Phil;
 class Evaluator
 {
 
-    private $symbolTable;
+    private $scope;
 
     public function __construct()
     {
-        $this->symbolTable = array(
+        $this->scope = array(
             '+' => function($a, $b) { return array_sum(func_get_args()); }
         );
     }
 
     public function evaluate($ast)
     {
-//        if (count($ast) === 0) {
-//            return null;
-//        }
 
-        $el = array();
+        $evaluationList = array();
 
         if (is_array($ast)) {
             foreach($ast as $elem) {
-                $el[]= $this->evaluate($elem);
+                $evaluationList[]= $this->evaluate($elem);
             }
-        } else if(array_key_exists($ast, $this->symbolTable)) {
-            return $this->symbolTable[$ast];
+        } else if($this->isValidSymbolInScope($ast)) {
+            return $this->getValueFromScope($ast);
         } else {
             return $ast;
         }
 
-        if (!count($el)) {
+        return $this->determineResultFromEvaluation($evaluationList);
+    }
+
+    /**
+     * @param $ast
+     * @return bool
+     */
+    private function isValidSymbolInScope($ast)
+    {
+        return array_key_exists($ast, $this->scope);
+    }
+
+    /**
+     * @param $ast
+     * @return mixed
+     */
+    private function getValueFromScope($ast)
+    {
+        return $this->scope[$ast];
+    }
+
+    /**
+     * @param $evaluationList
+     * @return mixed|null
+     */
+    private function determineResultFromEvaluation($evaluationList)
+    {
+        if (!count($evaluationList)) {
             return null;
-        } else if (is_callable($el[0])) {
-            return call_user_func_array($el[0], array_slice($el, 1));
+        } else if (is_callable($evaluationList[0])) {
+            $params = array_slice($evaluationList, 1);
+            $function = $evaluationList[0];
+            return call_user_func_array($function, $params);
+        } else if (count($evaluationList) === 1) {
+            return $evaluationList[0];
         } else {
-            return $el[0];
+            throw new \RuntimeException('Undeclared function "' . $evaluationList[0] . '"');
         }
     }
 }

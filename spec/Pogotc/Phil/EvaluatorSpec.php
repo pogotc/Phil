@@ -26,4 +26,9 @@ class EvaluatorSpec extends ObjectBehavior
     {
         $this->evaluate(array('+', 2, 3))->shouldBe(5);
     }
+
+    function it_throws_an_expection_for_undefined_functions()
+    {
+        $this->shouldThrow(new \RuntimeException('Undeclared function "foobar"'))->duringEvaluate(array('foobar', 5));
+    }
 }
