@@ -14,6 +14,13 @@ class Scope
             '-' => function() { return array_reduce(array_slice(func_get_args(), 1), function($carry, $item) { $carry -= $item; return $carry; }, func_get_args()[0]); },
             '/' => function() { return array_reduce(array_slice(func_get_args(), 1), function($carry, $item) { $carry /= $item; return $carry; }, func_get_args()[0]); },
             '*' => function() { return array_reduce(func_get_args(), function($carry, $item) { $carry *= $item; return $carry; }, 1); },
+            'quot' => function($a = null, $b = null) {
+                if ($a == null || $b == null) {
+                    return false;
+                }
+                $div = $a / $b;
+                return $div > 0 ? floor($div) : ceil($div);
+            },
             'mod' => function($a, $b = null) { return $b !== null ? $a % $b : false; },
             'rem' => function($a, $b = null) {
                 if ($b == null) {

@@ -45,6 +45,13 @@ class MathsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(400, $this->phil->run('(* 10 8 5)'));
     }
 
+    function testQuot()
+    {
+        $this->assertEquals(3, $this->phil->run('(quot 10 3)'));
+        $this->assertEquals(1, $this->phil->run('(quot 3 2)'));
+        $this->assertEquals(-1, $this->phil->run('(quot -5.9 3)'));
+    }
+
     function testMod()
     {
         $this->assertEquals(2, $this->phil->run('(mod 5 3)'));
