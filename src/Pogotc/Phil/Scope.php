@@ -21,12 +21,12 @@ class Scope
                 $div = $a / $b;
                 return $div > 0 ? floor($div) : ceil($div);
             },
-            'mod' => function($a, $b = null) { return $b !== null ? $a % $b : false; },
+            'mod' => function($a, $b = null) { return $b !== null ? ($a % $b) + ($a < 0 ? $b : 0) : false; },
             'rem' => function($a, $b = null) {
                 if ($b == null) {
                     return false;
                 }
-                return $a - (floor($a / $b) * $b);
+                return $a % $b;
             },
             'inc' => function($a = null) { return $a !== null ? intval($a) + 1 : false; },
             'dec' => function($a = null) { return $a !== null ? intval($a) - 1 : false; },

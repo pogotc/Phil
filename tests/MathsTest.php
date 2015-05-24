@@ -56,12 +56,13 @@ class MathsTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(2, $this->phil->run('(mod 5 3)'));
         $this->assertEquals(28, $this->phil->run('(mod 100 36 4)'));
+        $this->assertEquals(3, $this->phil->run('(mod -2 5)'));
         $this->assertFalse($this->phil->run('(mod 100)'));
     }
 
     function testRem()
     {
-        $this->assertEquals(3, $this->phil->run('(rem -21 4)'));
+        $this->assertEquals(-1, $this->phil->run('(rem -21 4)'));
         $this->assertEquals(6, $this->phil->run('(rem 56 10)'));
         $this->assertEquals(50, $this->phil->run('(rem 1250 60)'));
         $this->assertFalse($this->phil->run('(rem 100)'));
