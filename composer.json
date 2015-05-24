@@ -2,8 +2,8 @@
     "name": "pogotc/phil",
     "description": "PHp Interpreted Lisp",
     "require-dev": {
-        "phpspec/phpspec": "^2.2",
-        "phpunit/phpunit": "^4.6"
+        "phpspec/phpspec": "2.2.*",
+        "phpunit/phpunit": "4.6.*"
     },
     "authors": [
         {
