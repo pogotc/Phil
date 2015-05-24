@@ -10,7 +10,10 @@ class Scope
     public function __construct()
     {
         $this->environment = array(
-            '+' => function($a, $b) { return array_sum(func_get_args()); }
+            '+' => function($a, $b) { return array_sum(func_get_args()); },
+            '-' => function() { return array_reduce(array_slice(func_get_args(), 1), function($carry, $item) { $carry -= $item; return $carry; }, func_get_args()[0]); },
+            '/' => function() { return array_reduce(array_slice(func_get_args(), 1), function($carry, $item) { $carry /= $item; return $carry; }, func_get_args()[0]); },
+            '*' => function() { return array_reduce(func_get_args(), function($carry, $item) { $carry *= $item; return $carry; }, 1); }
         );
     }
 

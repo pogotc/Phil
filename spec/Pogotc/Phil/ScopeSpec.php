@@ -16,4 +16,19 @@ class ScopeSpec extends ObjectBehavior
     {
         $this->call('+', array(1, 2))->shouldBe(3);
     }
+
+    function it_can_subtract_numbers()
+    {
+        $this->call('-', array(10, 3))->shouldBe(7);
+    }
+
+    function it_can_divide_numbers()
+    {
+        $this->call('/', array(20, 5))->shouldBe(4);
+    }
+
+    function it_can_multiply_numbers()
+    {
+        $this->call('*', array(5, 5))->shouldBe(25);
+    }
 }
