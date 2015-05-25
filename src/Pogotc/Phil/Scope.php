@@ -50,6 +50,13 @@ class Scope
             'not=' => function() {
                 return !call_user_func_array($this->environment['='], func_get_args());
             }
+//            'defn' => function() {
+//                $args = func_get_args();
+//                $funcName = $args[0];
+//                $funcArgs = $args[1];
+//                $funcBody = $args[2];
+//                $this->environment[$funcName] = $funcBody;
+//            }
         );
     }
 
@@ -66,4 +73,7 @@ class Scope
         return $this->environment;
     }
 
+    public function addToEnvironment($name, $val) {
+        $this->environment[$name] = $val;
+    }
 }

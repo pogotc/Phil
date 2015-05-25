@@ -12,6 +12,18 @@ class ParserSpec extends ObjectBehavior
         $this->shouldHaveType('Pogotc\Phil\Parser');
     }
 
+    function it_can_parse_multi_nested_tokens()
+    {
+        $input = array('(', '*', '(', '+', '5', '5', ')', '(', '-', '10', '2', ')', ')');
+        $output = array(
+            '*',
+            array('+', '5', '5'),
+            array('-', '10', '2'),
+        );
+
+        $this->parse($input)->shouldBeLike($output);
+    }
+
     function it_returns_an_empty_array_for_empty_input()
     {
         $this->parse(array())->shouldBeLike(array());
@@ -36,4 +48,6 @@ class ParserSpec extends ObjectBehavior
         $input = array('(', '+', '1', '2');
         $this->shouldThrow(new \RuntimeException('Syntax error: expected ), got EOF'))->duringParse($input);
     }
+
+
 }

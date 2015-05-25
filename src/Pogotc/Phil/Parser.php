@@ -53,6 +53,7 @@ class Parser
             }
             $ast[]= $this->parseNextToken();
         }
+        $this->readNextToken();
         return $ast;
     }
 

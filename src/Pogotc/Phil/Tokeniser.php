@@ -9,6 +9,7 @@ class Tokeniser
     {
         $input = $this->stripNewLines($input);
         $input = $this->padBracketsWithSpaces($input);
+        $input = $this->separateFunctionNameAndArgs($input);
         $tokens = $this->splitBySpaces($input);
         $result = $this->removeEmptyChars($tokens);
         return $result;
@@ -50,5 +51,13 @@ class Tokeniser
     private function stripNewLines($input)
     {
         return str_replace(array("\r", "\n"), " ", $input);
+    }
+
+    /**
+     * @param $input
+     */
+    private function separateFunctionNameAndArgs($input)
+    {
+        return preg_replace('~(defn [\w\d]+)\[\]~', '$1 []', $input);
     }
 }

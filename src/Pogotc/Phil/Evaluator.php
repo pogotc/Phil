@@ -21,8 +21,17 @@ class Evaluator
         $evaluationList = array();
 
         if (is_array($ast)) {
-            foreach($ast as $elem) {
-                $evaluationList[]= $this->evaluate($elem);
+            $firstElem = count($ast) ? $ast[0] : false;
+            if ($firstElem == 'defn') {
+                $functionName = $ast[1];
+                $functionBody = $ast[3];
+                $this->scope[$functionName] = function() use ($functionBody){
+                    return $this->evaluate($functionBody);
+                };
+            } else {
+                foreach ($ast as $elem) {
+                    $evaluationList[] = $this->evaluate($elem);
+                }
             }
         } else if($this->isValidSymbolInScope($ast)) {
             return $this->getValueFromScope($ast);

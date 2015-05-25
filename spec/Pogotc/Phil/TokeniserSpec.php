@@ -53,4 +53,11 @@ class TokeniserSpec extends ObjectBehavior
 INPUT;
         $this->parse($input)->shouldBeLike(array('(', '+', 1, 3, ')'));
     }
+
+
+    function it_splits_args_lists_from_functions()
+    {
+        $input = '(defn funcName[] 5)';
+        $this->parse($input)->shouldBeLike(array('(', 'defn', 'funcName', '[]', '5', ')'));
+    }
 }
