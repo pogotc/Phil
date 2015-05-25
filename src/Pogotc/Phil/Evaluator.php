@@ -24,8 +24,13 @@ class Evaluator
             $firstElem = count($ast) ? $ast[0] : false;
             if ($firstElem == 'defn') {
                 $functionName = $ast[1];
+                $functionArgs = explode(',', str_replace(array('[', ']'), '', $ast[2]));
                 $functionBody = $ast[3];
-                $this->scope[$functionName] = function() use ($functionBody){
+                $this->scope[$functionName] = function() use ($functionArgs, $functionBody){
+                    $args = func_get_args();
+                    foreach ($functionArgs as $idx => $namedArg) {
+                        $this->scope[$namedArg] = $args[$idx];
+                    }
                     return $this->evaluate($functionBody);
                 };
             } else {

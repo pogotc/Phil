@@ -22,4 +22,11 @@ class FunctionTest extends AbstractPhilTest
         $this->assertEquals(80, $this->phil->run(('(doTheThings)')));
 
     }
+
+    public function testFunctionsCanReadArgs()
+    {
+        $this->phil->run('(defn returnArg [a] a)');
+        $this->assertEquals(5, $this->phil->run(('(returnArg 5)')));
+        $this->assertEquals(10, $this->phil->run(('(returnArg 10)')));
+    }
 }
