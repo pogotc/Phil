@@ -42,6 +42,11 @@ class TokeniserSpec extends ObjectBehavior
         $this->parse('(+ 2 3)')->shouldBeLike(array('(', '+', 2, 3, ')'));
     }
 
+    function it_accepts_brackets_that_are_next_to_each_other()
+    {
+        $this->parse('(+(* 1 2)(+ 3 4))')->shouldBeLike(array('(', '+', '(', '*', '1', '2', ')', '(', '+', '3', '4', ')', ')'));
+    }
+
     function it_supports_multiline_input()
     {
         $input = <<<INPUT
