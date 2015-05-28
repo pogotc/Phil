@@ -11,7 +11,8 @@ class EvaluatorSpec extends ObjectBehavior
 
     function let()
     {
-        $this->beConstructedWith(new Scope());
+        $scope = new Scope();
+        $this->beConstructedWith($scope->getEnvironment());
     }
 
     function it_is_initializable()

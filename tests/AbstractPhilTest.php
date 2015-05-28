@@ -16,6 +16,7 @@ abstract class AbstractPhilTest extends  \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->phil = new \Pogotc\Phil\Phil(new \Pogotc\Phil\Tokeniser(), new \Pogotc\Phil\Parser(), new \Pogotc\Phil\Evaluator(new \Pogotc\Phil\Scope()));
+        $scope = new Scope();
+        $this->phil = new Phil(new Tokeniser(), new Parser(), new Evaluator($scope->getEnvironment()));
     }
 }

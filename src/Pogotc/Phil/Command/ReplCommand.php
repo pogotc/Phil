@@ -22,7 +22,8 @@ class ReplCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $phil = new Phil(new Tokeniser(), new Parser(), new Evaluator(new Scope()));
+        $scope = new Scope();
+        $phil = new Phil(new Tokeniser(), new Parser(), new Evaluator($scope->getEnvironment()));
 
         do {
             $line = readline("PHIL> ");

@@ -2,6 +2,8 @@
 
 namespace Pogotc\Phil;
 
+use ArrayObject;
+
 class Evaluator
 {
 
@@ -10,9 +12,9 @@ class Evaluator
      */
     private $scope;
 
-    public function __construct(Scope $scope)
+    public function __construct($scope)
     {
-        $this->scope = $scope->getEnvironment();
+        $this->scope = new ArrayObject($scope);
     }
 
     public function evaluate($ast)
@@ -24,14 +26,17 @@ class Evaluator
             $firstElem = count($ast) ? $ast[0] : false;
             if ($firstElem == 'defn') {
                 $functionName = $ast[1];
-                $functionArgs = explode(',', str_replace(array('[', ']'), '', $ast[2]));
+                $functionArgs = $ast[2];
                 $functionBody = $ast[3];
                 $this->scope[$functionName] = function() use ($functionArgs, $functionBody){
                     $args = func_get_args();
+                    $localScope = $this->scope->getArrayCopy();
                     foreach ($functionArgs as $idx => $namedArg) {
-                        $this->scope[$namedArg] = $args[$idx];
+                        $localScope[$namedArg] = $args[$idx];
                     }
-                    return $this->evaluate($functionBody);
+
+                    $funcEvaluator = new Evaluator($localScope);
+                    return $funcEvaluator->evaluate($functionBody);
                 };
             } else {
                 foreach ($ast as $elem) {
@@ -53,7 +58,7 @@ class Evaluator
      */
     private function isValidSymbolInScope($ast)
     {
-        return array_key_exists($ast, $this->scope);
+        return $this->scope->offsetExists($ast);
     }
 
     /**
