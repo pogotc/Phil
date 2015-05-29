@@ -35,6 +35,7 @@ class MathsTest extends AbstractPhilTest
         $this->assertEquals(3, $this->phil->run('(quot 10 3)'));
         $this->assertEquals(1, $this->phil->run('(quot 3 2)'));
         $this->assertEquals(-1, $this->phil->run('(quot -5.9 3)'));
+        $this->assertFalse($this->phil->run('(quot -5.9)'));
     }
 
     function testMod()

@@ -36,4 +36,12 @@ class FunctionTest extends AbstractPhilTest
         $this->phil->run('(defn addNumbers (a b c) (+ a b c))');
         $this->assertEquals(6, $this->phil->run(('(addNumbers 1 2 3)')));
     }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testUndeclaredFunctionsThrowExceptions()
+    {
+        $this->phil->run('(fooBar 42)');
+    }
 }
