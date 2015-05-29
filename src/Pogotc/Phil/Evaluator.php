@@ -22,13 +22,13 @@ class Evaluator
 
         $evaluationList = array();
 
-        if (is_a($ast, "\ArrayObject")) {
+        if (is_a($ast, "Pogotc\\Phil\\Ast\\SymbolList")) {
             $firstElem = count($ast) ? $ast[0] : false;
             if ($firstElem == 'defn') {
                 $functionName = $ast[1];
                 $functionArgs = $ast[2];
                 $functionBody = $ast[3];
-                $this->scope[$functionName] = function() use ($functionArgs, $functionBody){
+                $this->scope[$functionName] = function () use ($functionArgs, $functionBody) {
                     $args = func_get_args();
                     $localScope = $this->scope->getArrayCopy();
                     foreach ($functionArgs as $idx => $namedArg) {
@@ -43,6 +43,8 @@ class Evaluator
                     $evaluationList[] = $this->evaluate($elem);
                 }
             }
+        } else if (is_a($ast, "Pogotc\\Phil\\Ast\\LiteralList")) {
+            return $ast->getArrayCopy();
         } else if($this->isValidSymbolInScope($ast)) {
             return $this->getValueFromScope($ast);
         } else {
