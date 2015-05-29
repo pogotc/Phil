@@ -3,6 +3,7 @@
 namespace spec\Pogotc\Phil;
 
 use PhpSpec\ObjectBehavior;
+use Pogotc\Phil\Ast\LiteralList;
 use Pogotc\Phil\Ast\SymbolList;
 use Prophecy\Argument;
 
@@ -50,5 +51,11 @@ class ParserSpec extends ObjectBehavior
         $this->shouldThrow(new \RuntimeException('Syntax error: expected ), got EOF'))->duringParse($input);
     }
 
+    function it_can_parse_a_literal_list()
+    {
+        $input = array("'(", "1", "2", "3", ")");
+        $output = new LiteralList(array("1", "2", "3"));
 
+        $this->parse($input)->shouldBeLike($output);
+    }
 }

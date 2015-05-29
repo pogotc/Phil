@@ -31,8 +31,9 @@ class Parser
 
         switch ($nextToken) {
             case "'(":
+                return $this->readList("Pogotc\\Phil\\Ast\\LiteralList");
             case '(':
-                return $this->readList();
+                return $this->readList("Pogotc\\Phil\\Ast\\SymbolList");
             default:
                 return $nextToken;
         }
@@ -46,9 +47,9 @@ class Parser
         return $this->tokenStream[$this->tokenStreamPos++];
     }
 
-    private function readList()
+    private function readList($listType = null)
     {
-        $ast = new SymbolList();
+        $ast = new $listType();
 
         while (($token = $this->peekNextToken()) !== ')') {
             if ($this->isUnexpectedToken($token)) {
