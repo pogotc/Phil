@@ -2,6 +2,8 @@
 
 namespace Pogotc\Phil;
 
+use Pogotc\Phil\Ast\SymbolList;
+
 class Parser
 {
 
@@ -28,6 +30,7 @@ class Parser
         $nextToken = $this->readNextToken();
 
         switch ($nextToken) {
+            case "'(":
             case '(':
                 return $this->readList();
             default:
@@ -45,7 +48,7 @@ class Parser
 
     private function readList()
     {
-        $ast = array();
+        $ast = new SymbolList();
 
         while (($token = $this->peekNextToken()) !== ')') {
             if ($this->isUnexpectedToken($token)) {

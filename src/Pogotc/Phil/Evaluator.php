@@ -22,7 +22,7 @@ class Evaluator
 
         $evaluationList = array();
 
-        if (is_array($ast)) {
+        if (is_a($ast, "\ArrayObject")) {
             $firstElem = count($ast) ? $ast[0] : false;
             if ($firstElem == 'defn') {
                 $functionName = $ast[1];

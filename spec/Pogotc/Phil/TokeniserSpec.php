@@ -47,6 +47,11 @@ class TokeniserSpec extends ObjectBehavior
         $this->parse('(+(* 1 2)(+ 3 4))')->shouldBeLike(array('(', '+', '(', '*', '1', '2', ')', '(', '+', '3', '4', ')', ')'));
     }
 
+    function it_treats_quoted_open_bracket_as_a_single_token()
+    {
+        $this->parse("'(")->shouldBeLike(array("'("));
+    }
+
     function it_supports_multiline_input()
     {
         $input = <<<INPUT

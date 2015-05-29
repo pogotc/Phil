@@ -21,7 +21,7 @@ class Tokeniser
      */
     private function padBracketsWithSpaces($input)
     {
-        return str_replace(array("(", ")"), array(" ( ", " ) "), $input);
+        return preg_replace("~('?\(|(?!\()(\)))~", ' $1 ', $input);
     }
 
     /**
