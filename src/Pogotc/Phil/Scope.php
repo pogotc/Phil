@@ -2,6 +2,8 @@
 
 namespace Pogotc\Phil;
 
+use Pogotc\Phil\Ast\LiteralList;
+
 class Scope
 {
 
@@ -53,12 +55,12 @@ class Scope
             'cons' => function($elem, $list) {
                 $listArray = $list->getArrayCopy();
                 array_unshift($listArray, $elem);
-                return new \ArrayObject($listArray);
+                return new LiteralList($listArray);
             },
             'map' => function($mappingFunction, $list) {
                 $listArray = $list->getArrayCopy();
                 $mappedArray = array_map($mappingFunction, $listArray);
-                return new \ArrayObject($mappedArray);
+                return new LiteralList($mappedArray);
             }
         );
     }

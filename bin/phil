@@ -1,11 +1,24 @@
 #!/usr/bin/env php
 <?php
 
+use Pogotc\Phil\Evaluator;
+use Pogotc\Phil\Parser;
+use Pogotc\Phil\Phil;
+use Pogotc\Phil\Scope;
+use Pogotc\Phil\Tokeniser;
+
 require __DIR__.'/../vendor/autoload.php';
 
-use Pogotc\Phil\Command\ReplCommand;
-use Symfony\Component\Console\Application;
 
-$application = new Application("PHIL", "0.1");
-$application->add(new ReplCommand());
-$application->run();
+$scope = new Scope();
+$phil = new Phil(new Tokeniser(), new Parser(), new Evaluator($scope->getEnvironment()));
+
+do {
+    $line = readline("PHIL> ");
+    readline_add_history($line);
+    $output = $phil->run($line);
+    if (is_a($output, "Pogotc\Phil\Ast\Printable")) {
+        $output = $output->toString();
+    }
+    print($output). "\n";
+} while (true);
