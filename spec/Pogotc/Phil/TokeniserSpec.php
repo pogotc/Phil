@@ -75,4 +75,10 @@ INPUT;
     {
         $this->parse('"foo"')->shouldBeLike(array("foo"));
     }
+
+    function it_handles_boolean_literals()
+    {
+        $this->parse('true')->shouldBeLike(array(true));
+        $this->parse('false')->shouldBeLike(array(false));
+    }
 }

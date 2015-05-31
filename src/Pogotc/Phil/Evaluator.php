@@ -42,6 +42,15 @@ class Evaluator
                     $funcEvaluator = new Evaluator($localScope);
                     return $funcEvaluator->evaluate($functionBody);
                 };
+            } elseif ($firstElem == 'if') {
+                $predicate = $ast[1];
+                if ($predicate) {
+                    return $this->evaluate($ast[2]);
+                } else {
+                    return $this->evaluate($ast[3]);
+                }
+
+
             } else {
                 foreach ($ast as $elem) {
                     $evaluationList[] = $this->evaluate($elem);

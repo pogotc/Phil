@@ -9,6 +9,7 @@ class LiteralList extends \ArrayObject implements Printable
 
     public function toString()
     {
-        return print_r($this->getArrayCopy(), true);
+//        return print_r($this->getArrayCopy(), true);
+        return var_dump($this->getArrayCopy());
     }
 }

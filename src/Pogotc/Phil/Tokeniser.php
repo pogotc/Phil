@@ -13,6 +13,7 @@ class Tokeniser
         $tokens = $this->splitBySpaces($input);
         $result = $this->removeEmptyChars($tokens);
         $result = $this->handleStringLiterals($result);
+        $result = $this->handleBooleanLiterals($result);
         return $result;
     }
 
@@ -68,6 +69,19 @@ class Tokeniser
      */
     private function handleStringLiterals($result)
     {
-        return preg_replace('~"([^"]+)"~', "$1", $result);
+        return array_map(function($item) {
+            return preg_replace('~"([^"]+)"~', "$1", $item);
+        }, $result);
+    }
+
+    /**
+     * @param $result
+     * @return mixed
+     */
+    private function handleBooleanLiterals($result)
+    {
+        return array_map(function($item) {
+            return str_replace(array('true', 'false'), array(true, 0), $item);
+        }, $result);
     }
 }
