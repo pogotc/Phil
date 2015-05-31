@@ -28,8 +28,8 @@ class Scope
                 }
                 return $a % $b;
             },
-            'inc' => function($a = null) { return $a !== null ? intval($a) + 1 : false; },
-            'dec' => function($a = null) { return $a !== null ? intval($a) - 1 : false; },
+            'inc' => function($a = null) { return $a !== null ? $a + 1 : false; },
+            'dec' => function($a = null) { return $a !== null ? $a - 1 : false; },
             'max' => function() {
                 $args = func_get_args();
                 return count($args) === 0 ? false :
