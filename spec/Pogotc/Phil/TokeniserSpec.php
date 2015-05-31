@@ -70,4 +70,9 @@ INPUT;
         $input = '(defn funcName[] 5)';
         $this->parse($input)->shouldBeLike(array('(', 'defn', 'funcName', '[]', '5', ')'));
     }
+
+    function it_handles_string_literals()
+    {
+        $this->parse('"foo"')->shouldBeLike(array("foo"));
+    }
 }

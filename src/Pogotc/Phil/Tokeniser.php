@@ -12,6 +12,7 @@ class Tokeniser
         $input = $this->separateFunctionNameAndArgs($input);
         $tokens = $this->splitBySpaces($input);
         $result = $this->removeEmptyChars($tokens);
+        $result = $this->handleStringLiterals($result);
         return $result;
     }
 
@@ -59,5 +60,14 @@ class Tokeniser
     private function separateFunctionNameAndArgs($input)
     {
         return preg_replace('~(defn [\w\d]+)\[\]~', '$1 []', $input);
+    }
+
+    /**
+     * @param $result
+     * @return mixed
+     */
+    private function handleStringLiterals($result)
+    {
+        return preg_replace('~"([^"]+)"~', "$1", $result);
     }
 }

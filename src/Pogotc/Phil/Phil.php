@@ -27,6 +27,7 @@ class Phil
 
     public function run($input)
     {
+        $example = array("bob", "cat");
         $tokens = $this->tokeniser->parse($input);
         $ast = $this->parser->parse($tokens);
         return $this->evaluator->evaluate($ast);
