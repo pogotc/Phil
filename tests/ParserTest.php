@@ -15,4 +15,9 @@ class ParserTest extends AbstractPhilTest
     {
         $this->phil->run('(+ 1 2');
     }
+
+    public function testEdgeCases()
+    {
+        $this->assertNull($this->phil->run(''));
+    }
 }

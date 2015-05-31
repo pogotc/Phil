@@ -36,11 +36,7 @@ class Parser
                 return $this->readList("Pogotc\\Phil\\Ast\\SymbolList");
             default:
                 if (is_numeric($nextToken)) {
-                    if ($this->isfloat($nextToken)) {
-                        return floatval($nextToken);
-                    } else {
-                        return intval($nextToken);
-                    }
+                    return floatval($nextToken);
                 }
                 return $nextToken;
         }
@@ -83,10 +79,5 @@ class Parser
     private function isUnexpectedToken($token)
     {
         return $token === '' || $token === null;
-    }
-
-    private function isfloat($f)
-    {
-        return ($f == (string)(float)$f);
     }
 }

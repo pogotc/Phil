@@ -24,6 +24,7 @@ class EvaluatorSpec extends ObjectBehavior
     function it_returns_null_for_empty_array()
     {
         $this->evaluate(new SymbolList(array()))->shouldBe(null);
+        $this->evaluate(array())->shouldBe(null);
     }
 
     function it_returns_integers_when_passed_as_input()

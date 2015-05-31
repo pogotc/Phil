@@ -20,6 +20,10 @@ class Evaluator
     public function evaluate($ast)
     {
 
+        if (is_array($ast) && !count($ast)) {
+            return null;
+        }
+
         $evaluationList = array();
 
         if (is_a($ast, "Pogotc\\Phil\\Ast\\SymbolList")) {
