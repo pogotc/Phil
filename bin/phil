@@ -15,6 +15,7 @@ $phil = new Phil(new Tokeniser(), new Parser(), new Evaluator($scope->getEnviron
 
 do {
     $line = readline("PHIL> ");
+    readline_add_history($line);
     $output = $phil->run($line);
     if (is_a($output, "Pogotc\Phil\Ast\Printable")) {
         $output = $output->toString();
