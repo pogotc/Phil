@@ -49,6 +49,16 @@ class Scope
             },
             'not=' => function() {
                 return !call_user_func_array($this->environment['='], func_get_args());
+            },
+            'cons' => function($elem, $list) {
+                $listArray = $list->getArrayCopy();
+                array_unshift($listArray, $elem);
+                return new \ArrayObject($listArray);
+            },
+            'map' => function($mappingFunction, $list) {
+                $listArray = $list->getArrayCopy();
+                $mappedArray = array_map($mappingFunction, $listArray);
+                return new \ArrayObject($mappedArray);
             }
         );
     }

@@ -44,7 +44,7 @@ class Evaluator
                 }
             }
         } else if (is_a($ast, "Pogotc\\Phil\\Ast\\LiteralList")) {
-            return $ast->getArrayCopy();
+            return new ArrayObject($ast->getArrayCopy());;
         } else if($this->isValidSymbolInScope($ast)) {
             return $this->getValueFromScope($ast);
         } else {
