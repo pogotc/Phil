@@ -12,4 +12,14 @@ class StringTest extends AbstractPhilTest
         $this->assertEquals("bar", $this->phil->run('(+ "" "bar")'));
         $this->assertEquals("", $this->phil->run('(+ "" "")'));
     }
+
+    public function testPrint()
+    {
+        ob_start();
+        $this->phil->run('(println "Hello World.")');
+        $result = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertEquals("Hello World.\n", $result);
+    }
 }

@@ -97,6 +97,10 @@ class Scope
                 } else {
                     return null;
                 }
+            },
+            'println' => function($elem) {
+                print($elem);
+                print("\n");
             }
         );
     }
