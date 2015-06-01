@@ -20,4 +20,19 @@ class ParserTest extends AbstractPhilTest
     {
         $this->assertNull($this->phil->run(''));
     }
+
+    public function testReverseString()
+    {
+        $this->phil->run("(defn revStr (n)
+                            (if
+                                (= 0 (count n))
+                                \"\"
+                                (+
+                                    (revStr (rest n))
+                                    (first n))
+                                )
+                            )");
+
+        $this->assertEquals("olleh", $this->phil->run('(revStr "hello")'));
+    }
 }
