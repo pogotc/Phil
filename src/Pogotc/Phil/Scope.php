@@ -42,7 +42,7 @@ class Scope
                     array_reduce($args, function($carry, $item) { return min($carry, $item);  }, $args[0]); },
             '=' => function() {
                 $args = func_get_args();
-                for ($i = 0; $i < count($args) - 2; $i++) {
+                for ($i = 0; $i < count($args) - 1; $i++) {
                     if ($args[$i] != $args[$i + 1]) {
                         return false;
                     }

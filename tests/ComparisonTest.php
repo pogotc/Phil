@@ -8,6 +8,7 @@ class ComparisonTest extends AbstractPhilTest
     {
         $this->assertTrue($this->phil->run('(= 2 2)'));
         $this->assertTrue($this->phil->run('(= 2 2 2)'));
+        $this->assertFalse($this->phil->run('(= 4 2)'));
         $this->assertFalse($this->phil->run('(= 4 2 2)'));
     }
 
