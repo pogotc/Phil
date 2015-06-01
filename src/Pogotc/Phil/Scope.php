@@ -61,6 +61,13 @@ class Scope
                 $listArray = $list->getArrayCopy();
                 $mappedArray = array_map($mappingFunction, $listArray);
                 return new LiteralList($mappedArray);
+            },
+            'count' => function($elem) {
+                if (is_string($elem)) {
+                    return strlen($elem);
+                } else {
+                    return count($elem);
+                }
             }
         );
     }
