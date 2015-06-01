@@ -41,4 +41,19 @@ class LinkedListTest extends AbstractPhilTest
         $this->assertEquals(0, $this->phil->run("(count \"\")"));
     }
 
+    public function testRest()
+    {
+        $this->assertEquals("oobar", $this->phil->run('(rest "foobar")'));
+        $this->assertEquals(new LiteralList(array(2, 3, 4)), $this->phil->run("(rest '(1 2 3 4))"));
+        $this->assertNull($this->phil->run('(rest "")'));
+        $this->assertNull($this->phil->run("(rest '())"));
+    }
+
+    public function testFirst()
+    {
+        $this->assertEquals("f", $this->phil->run('(first "foobar")'));
+        $this->assertEquals(1, $this->phil->run("(first '(1 2 3))"));
+        $this->assertNull($this->phil->run('(first "")'));
+        $this->assertNull($this->phil->run("(first '())"));
+    }
 }

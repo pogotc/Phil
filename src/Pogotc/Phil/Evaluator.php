@@ -43,7 +43,7 @@ class Evaluator
                     return $funcEvaluator->evaluate($functionBody);
                 };
             } elseif ($firstElem == 'if') {
-                $predicate = $ast[1];
+                $predicate = $this->evaluate($ast[1]);
                 if ($predicate) {
                     return $this->evaluate($ast[2]);
                 } else {
