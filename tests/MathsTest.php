@@ -7,6 +7,7 @@ class MathsTest extends AbstractPhilTest
     {
         $this->assertEquals(4, $this->phil->run('(+ 2 2)'));
         $this->assertEquals(300, $this->phil->run('(+ 100 200)'));
+        $this->assertEquals("foobar", $this->phil->run('(+ "foo" "bar")'));
     }
 
     public function testSubtraction()
