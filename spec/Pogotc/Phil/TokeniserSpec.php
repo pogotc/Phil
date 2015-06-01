@@ -74,6 +74,7 @@ INPUT;
     function it_handles_string_literals()
     {
         $this->parse('"foo"')->shouldBeLike(array("foo"));
+        $this->parse('"foo bar"')->shouldBeLike(array("foo bar"));
     }
 
     function it_handles_boolean_literals()
