@@ -38,5 +38,7 @@ class LinkedListTest extends AbstractPhilTest
     {
         $this->assertEquals(3, $this->phil->run("(count '(1 2 3))"));
         $this->assertEquals(6, $this->phil->run("(count \"foobar\")"));
+        $this->assertEquals(0, $this->phil->run("(count \"\")"));
     }
+
 }

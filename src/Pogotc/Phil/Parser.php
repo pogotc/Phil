@@ -78,6 +78,6 @@ class Parser
      */
     private function isUnexpectedToken($token)
     {
-        return $token === '' || $token === null;
+        return $token === null;
     }
 }

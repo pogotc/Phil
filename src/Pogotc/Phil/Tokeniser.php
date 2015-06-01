@@ -70,7 +70,7 @@ class Tokeniser
     private function handleStringLiterals($result)
     {
         return array_map(function($item) {
-            return preg_replace('~"([^"]+)"~', "$1", $item);
+            return preg_replace('~"([^"]*)"~', "$1", $item);
         }, $result);
     }
 
