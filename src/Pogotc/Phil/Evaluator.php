@@ -28,17 +28,32 @@ class Evaluator
             return null;
         }
 
-        if ($this->isASymbolList($ast)) {
-            return $this->evaluateSymbolList($ast);
-        } else if ($this->isALiteralList($ast)) {
-            return $ast;
+        if ($this->isList($ast)) {
+            return $this->evaluateList($ast);
         } else if($this->isValidSymbolInScope($ast)) {
             return $this->getValueFromScope($ast);
         } else {
             return $ast;
         }
 
+    }
 
+    /**
+     * @param $ast
+     * @return bool
+     */
+    private function isList($ast)
+    {
+        return $this->isASymbolList($ast) || $this->isALiteralList($ast);
+    }
+
+    private function evaluateList($ast)
+    {
+        if ($this->isASymbolList($ast)) {
+            return $this->evaluateSymbolList($ast);
+        } else if ($this->isALiteralList($ast)) {
+            return $ast;
+        }
     }
 
     /**
