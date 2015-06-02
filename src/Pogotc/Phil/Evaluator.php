@@ -12,6 +12,11 @@ class Evaluator
      */
     private $scope;
 
+    /**
+     * @var Phil
+     */
+    private $phil;
+
     public function __construct($scope)
     {
         $this->scope = new ArrayObject($scope);
@@ -49,8 +54,20 @@ class Evaluator
                 } else {
                     return $this->evaluate($ast[3]);
                 }
-
-
+            } elseif ($firstElem == 'do') {
+                $astArray = $ast->getArrayCopy();
+                $astsToDo = array_slice($astArray, 1, -1);
+                if (count($astsToDo)) {
+                    foreach ($astsToDo as $astToDo) {
+                        $this->evaluate($astToDo);
+                    }
+                }
+                $finalAst = $astArray[count($astArray) - 1];
+                return $this->evaluate($finalAst);
+            } elseif ($firstElem == 'load-file') {
+                $path = $ast[1];
+                $command = sprintf('(do %s)', file_get_contents($path));
+                return $this->phil->run($command);
             } else {
                 foreach ($ast as $elem) {
                     $evaluationList[] = $this->evaluate($elem);
@@ -102,5 +119,13 @@ class Evaluator
         } else {
             throw new \RuntimeException('Undeclared function "' . $evaluationList[0] . '"');
         }
+    }
+
+    /**
+     * @param Phil $phil
+     */
+    public function setPhilInterpreter($phil)
+    {
+        $this->phil = $phil;
     }
 }

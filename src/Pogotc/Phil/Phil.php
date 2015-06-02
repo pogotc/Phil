@@ -23,6 +23,7 @@ class Phil
         $this->tokeniser = $tokeniser;
         $this->parser = $parser;
         $this->evaluator = $evaluator;
+        $this->evaluator->setPhilInterpreter($this);
     }
 
     public function run($input)

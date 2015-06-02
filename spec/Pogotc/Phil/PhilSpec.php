@@ -30,6 +30,7 @@ class PhilSpec extends ObjectBehavior
         $tokeniser->parse($input)->willReturn($inputAsTokens);
         $parser->parse($inputAsTokens)->shouldBeCalled()->willReturn($parserOutput);
         $evaluator->evaluate($parserOutput)->shouldBeCalled();
+        $evaluator->setPhilInterpreter(Argument::type("\Pogotc\Phil\Phil"))->shouldBeCalled();
         $this->run($input);
     }
 }
