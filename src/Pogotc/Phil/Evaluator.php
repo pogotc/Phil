@@ -31,43 +31,16 @@ class Evaluator
 
         $evaluationList = array();
 
-        if (is_a($ast, "Pogotc\\Phil\\Ast\\SymbolList")) {
+        if ($this->isASymbolList($ast)) {
             $firstElem = count($ast) ? $ast[0] : false;
-            if ($firstElem == 'defn') {
-                $functionName = $ast[1];
-                $functionArgs = $ast[2];
-                $functionBody = $ast[3];
-                $this->scope[$functionName] = function () use ($functionArgs, $functionBody) {
-                    $args = func_get_args();
-                    $localScope = $this->scope->getArrayCopy();
-                    foreach ($functionArgs as $idx => $namedArg) {
-                        $localScope[$namedArg] = $args[$idx];
-                    }
-
-                    $funcEvaluator = new Evaluator($localScope);
-                    return $funcEvaluator->evaluate($functionBody);
-                };
-            } elseif ($firstElem == 'if') {
-                $predicate = $this->evaluate($ast[1]);
-                if ($predicate) {
-                    return $this->evaluate($ast[2]);
-                } else {
-                    return $this->evaluate($ast[3]);
-                }
-            } elseif ($firstElem == 'do') {
-                $astArray = $ast->getArrayCopy();
-                $astsToDo = array_slice($astArray, 1, -1);
-                if (count($astsToDo)) {
-                    foreach ($astsToDo as $astToDo) {
-                        $this->evaluate($astToDo);
-                    }
-                }
-                $finalAst = $astArray[count($astArray) - 1];
-                return $this->evaluate($finalAst);
-            } elseif ($firstElem == 'load-file') {
-                $path = $ast[1];
-                $command = sprintf('(do %s)', file_get_contents($path));
-                return $this->phil->run($command);
+            if ($this->isFunctionDeclaration($firstElem)) {
+                $this->evaluateFunction($ast);
+            } elseif ($this->isIfConditional($firstElem)) {
+                return $this->evaluateIfConditional($ast);
+            } elseif ($this->isDoBlock($firstElem)) {
+                return $this->evaluateDoBlock($ast);
+            } elseif ($this->isLoadFileDeclaration($firstElem)) {
+                return $this->evaluateLoadFile($ast);
             } else {
                 foreach ($ast as $elem) {
                     $evaluationList[] = $this->evaluate($elem);
@@ -127,5 +100,112 @@ class Evaluator
     public function setPhilInterpreter($phil)
     {
         $this->phil = $phil;
+    }
+
+    /**
+     * @param $firstElem
+     * @return bool
+     */
+    private function isFunctionDeclaration($firstElem)
+    {
+        return $firstElem == 'defn';
+    }
+
+    /**
+     * @param $ast
+     */
+    private function evaluateFunction($ast)
+    {
+        $functionName = $ast[1];
+        $functionArgs = $ast[2];
+        $functionBody = $ast[3];
+        $this->scope[$functionName] = function () use ($functionArgs, $functionBody) {
+            $args = func_get_args();
+            $localScope = $this->scope->getArrayCopy();
+            foreach ($functionArgs as $idx => $namedArg) {
+                $localScope[$namedArg] = $args[$idx];
+            }
+
+            $funcEvaluator = new Evaluator($localScope);
+            return $funcEvaluator->evaluate($functionBody);
+        };
+    }
+
+    /**
+     * @param $ast
+     * @return bool
+     */
+    private function isASymbolList($ast)
+    {
+        return is_a($ast, "Pogotc\\Phil\\Ast\\SymbolList");
+    }
+
+    /**
+     * @param $firstElem
+     * @return bool
+     */
+    private function isIfConditional($firstElem)
+    {
+        return $firstElem == 'if';
+    }
+
+    /**
+     * @param $firstElem
+     * @return bool
+     */
+    private function isDoBlock($firstElem)
+    {
+        return $firstElem == 'do';
+    }
+
+    /**
+     * @param $ast
+     * @return mixed|null
+     */
+    private function evaluateDoBlock($ast)
+    {
+        $astArray = $ast->getArrayCopy();
+        $astsToDo = array_slice($astArray, 1, -1);
+        if (count($astsToDo)) {
+            foreach ($astsToDo as $astToDo) {
+                $this->evaluate($astToDo);
+            }
+        }
+        $finalAst = $astArray[count($astArray) - 1];
+        return $this->evaluate($finalAst);
+    }
+
+    /**
+     * @param $ast
+     * @return mixed|null
+     */
+    private function evaluateIfConditional($ast)
+    {
+        $predicate = $this->evaluate($ast[1]);
+        if ($predicate) {
+            return $this->evaluate($ast[2]);
+        } else {
+            return $this->evaluate($ast[3]);
+        }
+    }
+
+    /**
+     * @param $firstElem
+     * @return bool
+     */
+    private function isLoadFileDeclaration($firstElem)
+    {
+        return $firstElem == 'load-file';
+    }
+
+    /**
+     * @param $ast
+     * @return mixed|null
+     */
+    private function evaluateLoadFile($ast)
+    {
+        $path = $ast[1];
+        $command = sprintf('(do %s)', file_get_contents($path));
+        return $this->phil->run($command);
     }
 }
