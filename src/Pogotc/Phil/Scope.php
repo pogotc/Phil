@@ -11,7 +11,17 @@ class Scope
 
     public function __construct()
     {
-        $this->environment = array(
+        $this->environment = array();
+
+        $this->addMathsFunctions();
+        $this->addComparisonFunctions();
+        $this->addListFunctions();
+        $this->addOutputFunctions();
+    }
+
+    private function addMathsFunctions()
+    {
+        $this->environment = array_merge($this->environment, array(
             '+' => function() {
                 $args = func_get_args();
                 if (count($args)) {
@@ -77,7 +87,13 @@ class Scope
                 }
                 return $this->reduceOverArgs($args, $operation, $initial);
 
-            },
+            }
+        ));
+    }
+
+    private function addComparisonFunctions()
+    {
+        $this->environment = array_merge($this->environment, array(
             '=' => function() {
                 $args = func_get_args();
                 for ($i = 0; $i < count($args) - 1; $i++) {
@@ -92,7 +108,13 @@ class Scope
             },
             'not=' => function() {
                 return !call_user_func_array($this->environment['='], func_get_args());
-            },
+            }
+        ));
+    }
+
+    private function addListFunctions()
+    {
+        $this->environment = array_merge($this->environment, array(
             'cons' => function($elem, $list) {
                 $listArray = $list->getArrayCopy();
                 array_unshift($listArray, $elem);
@@ -123,16 +145,22 @@ class Scope
                 if ($this->isValidNonEmptyString($elem)) {
                     return substr($elem, 0, 1);
                 } else if ($this->isValidNonEmptyArrayObject($elem)) {
-                   return $elem[0];
+                    return $elem[0];
                 } else {
                     return null;
                 }
-            },
+            }
+        ));
+    }
+
+    private function addOutputFunctions()
+    {
+        $this->environment = array_merge($this->environment, array(
             'println' => function($elem) {
                 print($elem);
                 print("\n");
             }
-        );
+        ));
     }
 
     public function call($functionName, $params)
