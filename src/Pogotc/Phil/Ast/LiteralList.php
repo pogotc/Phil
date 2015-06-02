@@ -4,11 +4,11 @@
 namespace Pogotc\Phil\Ast;
 
 
-class LiteralList extends \ArrayObject implements Printable
+class LiteralList extends \ArrayObject
 {
 
-    public function toString()
+    public function __toString()
     {
-        return var_dump($this->getArrayCopy());
+        return print_r($this->getArrayCopy(), true);
     }
 }
