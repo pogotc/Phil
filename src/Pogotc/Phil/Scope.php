@@ -36,17 +36,10 @@ class Scope
                 }
             },
             '-' => function () {
-                $args = array_slice(func_get_args(), 1);
-                $initial = func_get_args()[0];
-                $operation = "-";
-
-                return $this->reduceOverArgs($args, $operation, $initial);
+                return $this->reduceOverArgsWithFirstAsInitial(func_get_args(), "-");
             },
             '/' => function () {
-                $args = array_slice(func_get_args(), 1);
-                $initial = func_get_args()[0];
-                $operation = "/";
-                return $this->reduceOverArgs($args, $operation, $initial);
+                return $this->reduceOverArgsWithFirstAsInitial(func_get_args(), "/");
             },
             '*' => function () {
                 $initial = 1;
@@ -55,6 +48,13 @@ class Scope
                 return $this->reduceOverArgs($args, $operation, $initial);
             }
         ));
+    }
+
+    private function reduceOverArgsWithFirstAsInitial($funcArgs, $operation)
+    {
+        $args = array_slice($funcArgs, 1);
+        $initial = $funcArgs[0];
+        return $this->reduceOverArgs($args, $operation, $initial);
     }
 
     private function addMathsFunctions()
