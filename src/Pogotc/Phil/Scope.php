@@ -60,22 +60,39 @@ class Scope
     private function addMathsFunctions()
     {
         $this->environment = array_merge($this->environment, array(
-            'quot' => function($a = null, $b = null) {
-                if ($a == null || $b == null) {
-                    return false;
-                }
-                $div = $a / $b;
-                return $div > 0 ? floor($div) : ceil($div);
+            'quot' => function() {
+                return $this->runIfXArgsNotNull(2, func_get_args(), function($args){
+                    $a = $args[0];
+                    $b = $args[1];
+
+                    $div = $a / $b;
+                    return $div > 0 ? floor($div) : ceil($div);
+                });
+
             },
-            'mod' => function($a, $b = null) { return $b !== null ? ($a % $b) + ($a < 0 ? $b : 0) : false; },
+            'mod' => function() {
+                return $this->runIfXArgsNotNull(2, func_get_args(), function($args){
+                    $a = $args[0];
+                    $b = $args[1];
+
+                    return ($a % $b) + ($a < 0 ? $b : 0);
+                });
+            },
             'rem' => function($a, $b = null) {
-                if ($b == null) {
-                    return false;
-                }
-                return $a % $b;
+                return $this->runIfXArgsNotNull(2, func_get_args(), function($args){
+                    return $args[0] % $args[1];
+                });
             },
-            'inc' => function($a = null) { return $a !== null ? $a + 1 : false; },
-            'dec' => function($a = null) { return $a !== null ? $a - 1 : false; },
+            'inc' => function() {
+                return $this->runIfXArgsNotNull(1, func_get_args(), function($args){
+                     return $args[0] + 1;
+                });
+            },
+            'dec' => function($a = null) {
+                return $this->runIfXArgsNotNull(1, func_get_args(), function($args){
+                    return $args[0] - 1;
+                });
+            },
             'max' => function() {
                 $args = func_get_args();
                 return $this->reduceOverArgs($args, "max", $args[0]);
@@ -86,6 +103,19 @@ class Scope
 
             }
         ));
+    }
+
+    private function runIfXArgsNotNull($x, $args, $callback) {
+        $argsToCheck = array_slice($args, 0, min($x, count($args)));
+        if (count($argsToCheck) < $x) {
+            return false;
+        }
+        foreach ($argsToCheck as $arg) {
+            if ($arg === null) {
+                return false;
+            }
+        }
+        return $callback($argsToCheck);
     }
 
     private function addComparisonFunctions()
