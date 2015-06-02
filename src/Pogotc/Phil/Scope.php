@@ -24,9 +24,25 @@ class Scope
                     return null;
                 }
             },
-            '-' => function() { return array_reduce(array_slice(func_get_args(), 1), function($carry, $item) { $carry -= $item; return $carry; }, func_get_args()[0]); },
-            '/' => function() { return array_reduce(array_slice(func_get_args(), 1), function($carry, $item) { $carry /= $item; return $carry; }, func_get_args()[0]); },
-            '*' => function() { return array_reduce(func_get_args(), function($carry, $item) { $carry *= $item; return $carry; }, 1); },
+            '-' => function() {
+                $args = array_slice(func_get_args(), 1);
+                $initial = func_get_args()[0];
+                $operation = "-";
+
+                return $this->reduceOverArgs($args, $operation, $initial);
+            },
+            '/' => function() {
+                $args = array_slice(func_get_args(), 1);
+                $initial = func_get_args()[0];
+                $operation = "/";
+                return $this->reduceOverArgs($args, $operation, $initial);
+            },
+            '*' => function() {
+                $initial = 1;
+                $args = func_get_args();
+                $operation = "*";
+                return $this->reduceOverArgs($args, $operation, $initial);
+            },
             'quot' => function($a = null, $b = null) {
                 if ($a == null || $b == null) {
                     return false;
@@ -119,5 +135,30 @@ class Scope
     public function getEnvironment()
     {
         return $this->environment;
+    }
+
+    /**
+     * @param $args
+     * @param $operation
+     * @param $initial
+     * @return mixed
+     */
+    private function reduceOverArgs($args, $operation, $initial)
+    {
+        return array_reduce($args, function ($carry, $item) use ($operation) {
+            switch ($operation) {
+                case "-":
+                    $carry -= $item;
+                    break;
+                case "/":
+                    $carry /= $item;
+                    break;
+                case "*":
+                    $carry *= $item;
+                    break;
+            }
+
+            return $carry;
+        }, $initial);
     }
 }
