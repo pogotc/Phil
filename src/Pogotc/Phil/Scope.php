@@ -78,21 +78,11 @@ class Scope
             'dec' => function($a = null) { return $a !== null ? $a - 1 : false; },
             'max' => function() {
                 $args = func_get_args();
-                $initial = $args[0];
-                $operation = "max";
-                if (count($args) === 0) {
-                    return false;
-                }
-                return $this->reduceOverArgs($args, $operation, $initial);
+                return $this->reduceOverArgs($args, "max", $args[0]);
             },
             'min' => function() {
                 $args = func_get_args();
-                $initial = $args[0];
-                $operation = "min";
-                if (count($args) === 0) {
-                    return false;
-                }
-                return $this->reduceOverArgs($args, $operation, $initial);
+                return $this->reduceOverArgs($args, "min", $args[0]);
 
             }
         ));
@@ -191,6 +181,10 @@ class Scope
      */
     private function reduceOverArgs($args, $operation, $initial)
     {
+        if (count($args) === 0) {
+            return false;
+        }
+
         return array_reduce($args, function ($carry, $item) use ($operation) {
             switch ($operation) {
                 case "-":
