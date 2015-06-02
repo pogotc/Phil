@@ -13,6 +13,12 @@ require __DIR__.'/../vendor/autoload.php';
 $scope = new Scope();
 $phil = new Phil(new Tokeniser(), new Parser(), new Evaluator($scope->getEnvironment()));
 
+$filePath = $argv[1];
+if (isset($filePath)) {
+    $phil->run('(load-file "'.$filePath.'")');
+    exit();
+}
+
 do {
     $line = readline("PHIL> ");
     readline_add_history($line);
