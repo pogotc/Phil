@@ -61,12 +61,23 @@ class Scope
             'dec' => function($a = null) { return $a !== null ? $a - 1 : false; },
             'max' => function() {
                 $args = func_get_args();
-                return count($args) === 0 ? false :
-                    array_reduce($args, function($carry, $item) { return max($carry, $item);  }, $args[0]); },
+                $initial = $args[0];
+                $operation = "max";
+                if (count($args) === 0) {
+                    return false;
+                }
+                return $this->reduceOverArgs($args, $operation, $initial);
+            },
             'min' => function() {
                 $args = func_get_args();
-                return count($args) === 0 ? false :
-                    array_reduce($args, function($carry, $item) { return min($carry, $item);  }, $args[0]); },
+                $initial = $args[0];
+                $operation = "min";
+                if (count($args) === 0) {
+                    return false;
+                }
+                return $this->reduceOverArgs($args, $operation, $initial);
+
+            },
             '=' => function() {
                 $args = func_get_args();
                 for ($i = 0; $i < count($args) - 1; $i++) {
@@ -155,6 +166,9 @@ class Scope
                     break;
                 case "*":
                     $carry *= $item;
+                    break;
+                default:
+                    $carry = $operation($carry, $item);
                     break;
             }
 
