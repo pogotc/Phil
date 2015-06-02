@@ -60,6 +60,9 @@ class Scope
                 }
                 return true;
             },
+            '>' => function($a, $b) {
+                return $a > $b;
+            },
             'not=' => function() {
                 return !call_user_func_array($this->environment['='], func_get_args());
             },

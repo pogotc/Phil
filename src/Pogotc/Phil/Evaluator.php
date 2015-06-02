@@ -8,7 +8,7 @@ class Evaluator
 {
 
     /**
-     * @var Scope
+     * @var \ArrayObject
      */
     private $scope;
 
