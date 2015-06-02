@@ -1,6 +1,7 @@
 {
     "name": "pogotc/phil",
     "description": "PHp Interpreted Lisp",
+    "license": "MIT",
     "require": {
 
     },
