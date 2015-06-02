@@ -78,7 +78,7 @@ class Scope
                     return ($a % $b) + ($a < 0 ? $b : 0);
                 });
             },
-            'rem' => function($a, $b = null) {
+            'rem' => function() {
                 return $this->runIfXArgsNotNull(2, func_get_args(), function($args){
                     return $args[0] % $args[1];
                 });
@@ -88,7 +88,7 @@ class Scope
                      return $args[0] + 1;
                 });
             },
-            'dec' => function($a = null) {
+            'dec' => function() {
                 return $this->runIfXArgsNotNull(1, func_get_args(), function($args){
                     return $args[0] - 1;
                 });
