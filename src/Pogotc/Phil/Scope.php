@@ -111,18 +111,18 @@ class Scope
                 }
             },
             'rest' => function($elem) {
-                if (is_string($elem) && strlen($elem) > 0) {
+                if ($this->isValidNonEmptyString($elem)) {
                     return substr($elem, 1);
-                } else if (is_a($elem, "\ArrayObject") && count($elem) > 0) {
+                } else if ($this->isValidNonEmptyArrayObject($elem)) {
                     return new LiteralList(array_slice($elem->getArrayCopy(), 1));
                 } else {
                     return null;
                 }
             },
             'first' => function($elem) {
-                if (is_string($elem) && strlen($elem) > 0) {
+                if ($this->isValidNonEmptyString($elem)) {
                     return substr($elem, 0, 1);
-                } else if (is_a($elem, "\ArrayObject") && count($elem) > 0) {
+                } else if ($this->isValidNonEmptyArrayObject($elem)) {
                    return $elem[0];
                 } else {
                     return null;
@@ -174,5 +174,23 @@ class Scope
 
             return $carry;
         }, $initial);
+    }
+
+    /**
+     * @param $elem
+     * @return bool
+     */
+    private function isValidNonEmptyString($elem)
+    {
+        return is_string($elem) && strlen($elem) > 0;
+    }
+
+    /**
+     * @param $elem
+     * @return bool
+     */
+    private function isValidNonEmptyArrayObject($elem)
+    {
+        return is_a($elem, "\ArrayObject") && count($elem) > 0;
     }
 }
