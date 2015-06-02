@@ -24,29 +24,13 @@ class Evaluator
 
     public function evaluate($ast)
     {
-
-        if (is_array($ast) && !count($ast)) {
+        if ($this->isUnevaluatable($ast)) {
             return null;
         }
 
-        $evaluationList = array();
-
         if ($this->isASymbolList($ast)) {
-            $firstElem = count($ast) ? $ast[0] : false;
-            if ($this->isFunctionDeclaration($firstElem)) {
-                $this->evaluateFunction($ast);
-            } elseif ($this->isIfConditional($firstElem)) {
-                return $this->evaluateIfConditional($ast);
-            } elseif ($this->isDoBlock($firstElem)) {
-                return $this->evaluateDoBlock($ast);
-            } elseif ($this->isLoadFileDeclaration($firstElem)) {
-                return $this->evaluateLoadFile($ast);
-            } else {
-                foreach ($ast as $elem) {
-                    $evaluationList[] = $this->evaluate($elem);
-                }
-            }
-        } else if (is_a($ast, "Pogotc\\Phil\\Ast\\LiteralList")) {
+            return $this->evaluateSymbolList($ast);
+        } else if ($this->isALiteralList($ast)) {
             return $ast;
         } else if($this->isValidSymbolInScope($ast)) {
             return $this->getValueFromScope($ast);
@@ -54,8 +38,36 @@ class Evaluator
             return $ast;
         }
 
-        return $this->determineResultFromEvaluation($evaluationList);
+
     }
+
+    /**
+     * @param $ast
+     * @return bool
+     */
+    private function isUnevaluatable($ast)
+    {
+        return is_array($ast) && !count($ast);
+    }
+
+    /**
+     * @param $ast
+     * @return bool
+     */
+    private function isASymbolList($ast)
+    {
+        return is_a($ast, "Pogotc\\Phil\\Ast\\SymbolList");
+    }
+
+    /**
+     * @param $ast
+     * @return bool
+     */
+    private function isALiteralList($ast)
+    {
+        return is_a($ast, "Pogotc\\Phil\\Ast\\LiteralList");
+    }
+
 
     /**
      * @param $ast
@@ -76,30 +88,30 @@ class Evaluator
     }
 
     /**
-     * @param $evaluationList
-     * @return mixed|null
-     */
-    private function determineResultFromEvaluation($evaluationList)
-    {
-        if (!count($evaluationList)) {
-            return null;
-        } else if (is_callable($evaluationList[0])) {
-            $params = array_slice($evaluationList, 1);
-            $function = $evaluationList[0];
-            return call_user_func_array($function, $params);
-        } else if (count($evaluationList) === 1) {
-            return $evaluationList[0];
-        } else {
-            throw new \RuntimeException('Undeclared function "' . $evaluationList[0] . '"');
-        }
-    }
-
-    /**
      * @param Phil $phil
      */
     public function setPhilInterpreter($phil)
     {
         $this->phil = $phil;
+    }
+    /**
+     * @param $ast
+     * @return mixed|null
+     */
+    private function evaluateSymbolList($ast)
+    {
+        $firstElem = count($ast) ? $ast[0] : false;
+        if ($this->isFunctionDeclaration($firstElem)) {
+            $this->evaluateFunction($ast);
+        } elseif ($this->isIfConditional($firstElem)) {
+            return $this->evaluateIfConditional($ast);
+        } elseif ($this->isDoBlock($firstElem)) {
+            return $this->evaluateDoBlock($ast);
+        } elseif ($this->isLoadFileDeclaration($firstElem)) {
+            return $this->evaluateLoadFile($ast);
+        } else {
+            return $this->evaluateAst($ast);
+        }
     }
 
     /**
@@ -132,21 +144,26 @@ class Evaluator
     }
 
     /**
-     * @param $ast
-     * @return bool
-     */
-    private function isASymbolList($ast)
-    {
-        return is_a($ast, "Pogotc\\Phil\\Ast\\SymbolList");
-    }
-
-    /**
      * @param $firstElem
      * @return bool
      */
     private function isIfConditional($firstElem)
     {
         return $firstElem == 'if';
+    }
+
+    /**
+     * @param $ast
+     * @return mixed|null
+     */
+    private function evaluateIfConditional($ast)
+    {
+        $predicate = $this->evaluate($ast[1]);
+        if ($predicate) {
+            return $this->evaluate($ast[2]);
+        } else {
+            return $this->evaluate($ast[3]);
+        }
     }
 
     /**
@@ -176,20 +193,6 @@ class Evaluator
     }
 
     /**
-     * @param $ast
-     * @return mixed|null
-     */
-    private function evaluateIfConditional($ast)
-    {
-        $predicate = $this->evaluate($ast[1]);
-        if ($predicate) {
-            return $this->evaluate($ast[2]);
-        } else {
-            return $this->evaluate($ast[3]);
-        }
-    }
-
-    /**
      * @param $firstElem
      * @return bool
      */
@@ -207,5 +210,37 @@ class Evaluator
         $path = $ast[1];
         $command = sprintf('(do %s)', file_get_contents($path));
         return $this->phil->run($command);
+    }
+
+    /**
+     * @param $ast
+     * @return mixed|null
+     */
+    private function evaluateAst($ast)
+    {
+        $evaluationList = array();
+        foreach ($ast as $elem) {
+            $evaluationList[] = $this->evaluate($elem);
+        }
+        return $this->determineResultFromEvaluation($evaluationList);
+    }
+
+    /**
+     * @param $evaluationList
+     * @return mixed|null
+     */
+    private function determineResultFromEvaluation($evaluationList)
+    {
+        if (!count($evaluationList)) {
+            return null;
+        } else if (is_callable($evaluationList[0])) {
+            $params = array_slice($evaluationList, 1);
+            $function = $evaluationList[0];
+            return call_user_func_array($function, $params);
+        } else if (count($evaluationList) === 1) {
+            return $evaluationList[0];
+        } else {
+            throw new \RuntimeException('Undeclared function "' . $evaluationList[0] . '"');
+        }
     }
 }
