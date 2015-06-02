@@ -13,16 +13,17 @@ class Scope
     {
         $this->environment = array();
 
+        $this->addCoreArithmeticFunctions();
         $this->addMathsFunctions();
         $this->addComparisonFunctions();
         $this->addListFunctions();
         $this->addOutputFunctions();
     }
 
-    private function addMathsFunctions()
+    private function addCoreArithmeticFunctions()
     {
         $this->environment = array_merge($this->environment, array(
-            '+' => function() {
+            '+' => function () {
                 $args = func_get_args();
                 if (count($args)) {
                     if (is_string($args[0])) {
@@ -34,25 +35,31 @@ class Scope
                     return null;
                 }
             },
-            '-' => function() {
+            '-' => function () {
                 $args = array_slice(func_get_args(), 1);
                 $initial = func_get_args()[0];
                 $operation = "-";
 
                 return $this->reduceOverArgs($args, $operation, $initial);
             },
-            '/' => function() {
+            '/' => function () {
                 $args = array_slice(func_get_args(), 1);
                 $initial = func_get_args()[0];
                 $operation = "/";
                 return $this->reduceOverArgs($args, $operation, $initial);
             },
-            '*' => function() {
+            '*' => function () {
                 $initial = 1;
                 $args = func_get_args();
                 $operation = "*";
                 return $this->reduceOverArgs($args, $operation, $initial);
-            },
+            }
+        ));
+    }
+
+    private function addMathsFunctions()
+    {
+        $this->environment = array_merge($this->environment, array(
             'quot' => function($a = null, $b = null) {
                 if ($a == null || $b == null) {
                     return false;
