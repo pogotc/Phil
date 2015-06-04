@@ -32,6 +32,10 @@ class LinkedListTest extends AbstractPhilTest
         $result = $this->phil->run("(map inc '(1.23 2.34 3.45))");
         $expectedResult = new LiteralList(array(2.23, 3.34, 4.45));
         $this->assertEquals($expectedResult, $result);
+
+        $result = $this->phil->run("(map (fn (a) (* a 2)) '(1 2 3 4))");
+        $expectedResult = new LiteralList(array(2, 4, 6, 8));
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testCount()

@@ -42,6 +42,15 @@ class Evaluator
      * @param $ast
      * @return bool
      */
+    private function isUnevaluatable($ast)
+    {
+        return is_array($ast) && !count($ast);
+    }
+
+    /**
+     * @param $ast
+     * @return bool
+     */
     private function isList($ast)
     {
         return $this->isASymbolList($ast) || $this->isALiteralList($ast);
@@ -54,15 +63,6 @@ class Evaluator
         } else if ($this->isALiteralList($ast)) {
             return $ast;
         }
-    }
-
-    /**
-     * @param $ast
-     * @return bool
-     */
-    private function isUnevaluatable($ast)
-    {
-        return is_array($ast) && !count($ast);
     }
 
     /**
@@ -117,7 +117,7 @@ class Evaluator
     {
         $firstElem = count($ast) ? $ast[0] : false;
         if ($this->isFunctionDeclaration($firstElem)) {
-            $this->evaluateFunction($ast);
+            return $this->evaluateFunction($ast);
         } elseif ($this->isIfConditional($firstElem)) {
             return $this->evaluateIfConditional($ast);
         } elseif ($this->isDoBlock($firstElem)) {
@@ -135,7 +135,7 @@ class Evaluator
      */
     private function isFunctionDeclaration($firstElem)
     {
-        return $firstElem == 'defn';
+        return $firstElem == 'defn' || $firstElem == 'fn';
     }
 
     /**
@@ -143,9 +143,15 @@ class Evaluator
      */
     private function evaluateFunction($ast)
     {
-        $functionName = $ast[1];
-        $functionArgs = $ast[2];
-        $functionBody = $ast[3];
+        if ($ast[0] == 'fn') {
+            $functionName = md5(rand());
+            $functionArgs = $ast[1];
+            $functionBody = $ast[2];
+        } else {
+            $functionName = $ast[1];
+            $functionArgs = $ast[2];
+            $functionBody = $ast[3];
+        }
         $this->scope[$functionName] = function () use ($functionArgs, $functionBody) {
             $args = func_get_args();
             $localScope = $this->scope->getArrayCopy();
@@ -156,6 +162,7 @@ class Evaluator
             $funcEvaluator = new Evaluator($localScope);
             return $funcEvaluator->evaluate($functionBody);
         };
+        return $this->scope[$functionName];
     }
 
     /**
