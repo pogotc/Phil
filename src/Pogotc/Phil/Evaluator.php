@@ -237,6 +237,27 @@ class Evaluator
     }
 
     /**
+     * @param $firstElem
+     * @return bool
+     */
+    private function isDefBlock($firstElem)
+    {
+        return $firstElem == 'def';
+    }
+
+    /**
+     * @param $ast
+     * @return mixed
+     */
+    private function evaluateDefBlock($ast)
+    {
+        $varName = $ast[1];
+        $varBody = $this->evaluate($ast[2]);
+        $this->scope[$varName] = $varBody;
+        return $this->scope[$varName];
+    }
+
+    /**
      * @param $ast
      * @return mixed|null
      */
@@ -274,24 +295,5 @@ class Evaluator
     private function generateAnonymousFunctionName()
     {
         return "__anon__".substr(md5(rand()), 0, 20);
-    }
-
-    /**
-     * @param $firstElem
-     * @return bool
-     */
-    private function isDefBlock($firstElem)
-    {
-        return $firstElem == 'def';
-    }
-
-    /**
-     * @param $ast
-     */
-    private function evaluateDefBlock($ast)
-    {
-        $varName = $ast[1];
-        $varBody = $this->evaluate($ast[2]);
-        $this->scope[$varName] = $varBody;
     }
 }
