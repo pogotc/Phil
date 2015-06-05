@@ -124,6 +124,8 @@ class Evaluator
             return $this->evaluateDoBlock($ast);
         } elseif ($this->isLoadFileDeclaration($firstElem)) {
             return $this->evaluateLoadFile($ast);
+        } elseif ($this->isDefBlock($firstElem)) {
+            return $this->evaluateDefBlock($ast);
         } else {
             return $this->evaluateAst($ast);
         }
@@ -144,7 +146,7 @@ class Evaluator
     private function evaluateFunction($ast)
     {
         if ($ast[0] == 'fn') {
-            $functionName = md5(rand());
+            $functionName = $this->generateAnonymousFunctionName();
             $functionArgs = $ast[1];
             $functionBody = $ast[2];
         } else {
@@ -264,5 +266,32 @@ class Evaluator
         } else {
             throw new \RuntimeException('Undeclared function "' . $evaluationList[0] . '"');
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function generateAnonymousFunctionName()
+    {
+        return "__anon__".substr(md5(rand()), 0, 20);
+    }
+
+    /**
+     * @param $firstElem
+     * @return bool
+     */
+    private function isDefBlock($firstElem)
+    {
+        return $firstElem == 'def';
+    }
+
+    /**
+     * @param $ast
+     */
+    private function evaluateDefBlock($ast)
+    {
+        $varName = $ast[1];
+        $varBody = $this->evaluate($ast[2]);
+        $this->scope[$varName] = $varBody;
     }
 }

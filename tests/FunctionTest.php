@@ -7,13 +7,12 @@ class FunctionTest extends AbstractPhilTest
     public function testAnonymousFunction()
     {
         $result = $this->phil->run('(fn () "Hello World")');
-
         $this->assertTrue(is_a($result, '\Closure'));
 
         $this->assertEquals("Hello, World", $this->phil->run('((fn () "Hello, World"))'));
 
-//        $this->phil->run('(def helloWorld (fn () "Hello World"))');
-//        $this->assertEquals("Hello, World", '(helloWorld)');
+        $this->phil->run('(def helloWorld (fn () "Hello, World"))');
+        $this->assertEquals("Hello, World", $this->phil->run('(helloWorld)'));
     }
 
     public function testFunctionsWithNoArguments()
