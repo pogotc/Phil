@@ -25,6 +25,9 @@ do {
     $output = $phil->run($line);
     if (is_a($output, "Pogotc\Phil\Ast\Printable")) {
         $output = $output->toString();
+    } else if (is_a($output, "\Closure")) {
+        print "Func\n";
+    } else {
+        print($output) . "\n";
     }
-    print($output). "\n";
 } while (true);

@@ -13,6 +13,9 @@ class FunctionTest extends AbstractPhilTest
 
         $this->phil->run('(def helloWorld (fn () "Hello, World"))');
         $this->assertEquals("Hello, World", $this->phil->run('(helloWorld)'));
+
+        $this->phil->run('(def addOne (fn (a) (+ a 1)))');
+        $this->assertEquals(6, $this->phil->run('(addOne 5)'));
     }
 
     public function testFunctionsWithNoArguments()
