@@ -4,6 +4,7 @@ namespace spec\Pogotc\Phil;
 
 use PhpSpec\ObjectBehavior;
 use Pogotc\Phil\Ast\LiteralList;
+use Pogotc\Phil\Ast\Map;
 use Pogotc\Phil\Ast\SymbolList;
 use Prophecy\Argument;
 
@@ -57,5 +58,15 @@ class ParserSpec extends ObjectBehavior
         $output = new LiteralList(array("1", "2", "3"));
 
         $this->parse($input)->shouldBeLike($output);
+    }
+
+    function it_can_parse_a_map()
+    {
+        $input = array('{', '"a"', '1', '"b"', '2', '"c"', '3', '}');
+        $output = new Map(array("a" => 1, "b" => 2, "c" => 3));
+        $this->parse($input)->shouldBeLike($output);
+
+        $input = array('{', '"a"', '1', '"b"', '2', '"c"', '}');
+        $this->shouldThrow(new \RuntimeException('Odd number of hash map arguments'))->duringParse($input);
     }
 }

@@ -3,6 +3,7 @@
 namespace Pogotc\Phil;
 
 use Pogotc\Phil\Ast\SymbolList;
+use Pogotc\Phil\Ast\Map;
 
 class Parser
 {
@@ -34,6 +35,8 @@ class Parser
                 return $this->readList("Pogotc\\Phil\\Ast\\LiteralList");
             case '(':
                 return $this->readList("Pogotc\\Phil\\Ast\\SymbolList");
+            case '{':
+                return Map::fromLiteralList($this->readList("Pogotc\\Phil\\Ast\\LiteralList", '}'));
             default:
                 if (is_numeric($nextToken)) {
                     return floatval($nextToken);
@@ -50,13 +53,13 @@ class Parser
         return $this->tokenStream[$this->tokenStreamPos++];
     }
 
-    private function readList($listType = null)
+    private function readList($listType = null, $endToken = ')')
     {
         $ast = new $listType();
 
-        while (($token = $this->peekNextToken()) !== ')') {
+        while (($token = $this->peekNextToken()) !== $endToken) {
             if ($this->isUnexpectedToken($token)) {
-                throw new \RuntimeException('Syntax error: expected ), got EOF');
+                throw new \RuntimeException('Syntax error: expected '.$endToken.', got EOF');
             }
             $ast[]= $this->parseNextToken();
         }
