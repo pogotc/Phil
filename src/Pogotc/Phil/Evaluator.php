@@ -80,7 +80,7 @@ class Evaluator
      */
     private function isALiteralList($ast)
     {
-        return is_a($ast, "Pogotc\\Phil\\Ast\\LiteralList");
+        return is_a($ast, "Pogotc\\Phil\\Ast\\LiteralList") || is_a($ast, "Pogotc\\Phil\\Ast\\Map");
     }
 
 
@@ -282,6 +282,8 @@ class Evaluator
             $params = array_slice($evaluationList, 1);
             $function = $evaluationList[0];
             return call_user_func_array($function, $params);
+        } else if (method_exists($evaluationList[0], "call")) {
+            return $evaluationList[0]->call(array_slice($evaluationList, 1));
         } else if (count($evaluationList) === 1) {
             return $evaluationList[0];
         } else {

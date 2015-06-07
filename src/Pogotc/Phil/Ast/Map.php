@@ -23,4 +23,14 @@ class Map extends \ArrayObject
         }
         return $map;
     }
+
+    public function call($params)
+    {
+        return $this->offsetExists($params[0]) ? $this->offsetGet($params[0]) : false;
+    }
+
+    public function __toString()
+    {
+        return print_r($this->getArrayCopy(), true);
+    }
 }
