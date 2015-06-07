@@ -32,8 +32,8 @@ class Tokeniser
      */
     private function splitBySpaces($input)
     {
-        preg_match_all('~"[^"]+"|\S+~', $input, $matches);
-        return $matches[0];
+        preg_match_all('~[\s,]*("[^"]+"|[^\s,]*)~', $input, $matches);
+        return $matches[1];
     }
 
     /**
@@ -43,7 +43,7 @@ class Tokeniser
     private function removeEmptyChars($tokens)
     {
         return array_values(array_filter($tokens, function ($token) {
-            return $token !== '';
+            return $token !== '' && $token !== ' ';
         }));
     }
 

@@ -82,4 +82,10 @@ INPUT;
         $this->parse('true')->shouldBeLike(array(true));
         $this->parse('false')->shouldBeLike(array(false));
     }
+
+    function it_ignores_commas()
+    {
+        $this->parse('(func 1, 2, 3)')->shouldBeLike(array('(', 'func', '1', '2', '3', ')'));
+        $this->parse('(func 1,2,3)')->shouldBeLike(array('(', 'func', '1', '2', '3', ')'));
+    }
 }
