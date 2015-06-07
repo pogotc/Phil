@@ -32,7 +32,7 @@ class Tokeniser
      */
     private function splitBySpaces($input)
     {
-        preg_match_all('~[\s,]*("[^"]+"|[^\s,]*)~', $input, $matches);
+        preg_match_all('~[\s,]*([\(\)\{\}\[\]]+|"[^"]+"|[^\s,\[\{\}\)]+)~', $input, $matches);
         return $matches[1];
     }
 

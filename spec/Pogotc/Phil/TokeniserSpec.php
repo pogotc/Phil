@@ -88,4 +88,9 @@ INPUT;
         $this->parse('(func 1, 2, 3)')->shouldBeLike(array('(', 'func', '1', '2', '3', ')'));
         $this->parse('(func 1,2,3)')->shouldBeLike(array('(', 'func', '1', '2', '3', ')'));
     }
+
+    function it_handles_curly_brackets()
+    {
+        $this->parse('{"a" 1, "b" 2, "c" 3}')->shouldBeLike(array('{', 'a', '1', 'b', '2', 'c', '3', '}'));
+    }
 }
