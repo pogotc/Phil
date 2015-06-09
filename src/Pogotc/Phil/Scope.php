@@ -23,7 +23,7 @@ class Scope
     private function addCoreArithmeticFunctions()
     {
         $this->environment = array_merge($this->environment, array(
-            '+' => function () {
+            '+' => function() {
                 $args = func_get_args();
                 if (count($args)) {
                     if (is_string($args[0])) {
@@ -35,13 +35,13 @@ class Scope
                     return null;
                 }
             },
-            '-' => function () {
+            '-' => function() {
                 return $this->reduceOverArgsWithFirstAsInitial(func_get_args(), "-");
             },
-            '/' => function () {
+            '/' => function() {
                 return $this->reduceOverArgsWithFirstAsInitial(func_get_args(), "/");
             },
-            '*' => function () {
+            '*' => function() {
                 $initial = 1;
                 $args = func_get_args();
                 $operation = "*";
@@ -61,7 +61,7 @@ class Scope
     {
         $this->environment = array_merge($this->environment, array(
             'quot' => function() {
-                return $this->runIfXArgsNotNull(2, func_get_args(), function($args){
+                return $this->runIfXArgsNotNull(2, func_get_args(), function($args) {
                     $a = $args[0];
                     $b = $args[1];
 
@@ -71,7 +71,7 @@ class Scope
 
             },
             'mod' => function() {
-                return $this->runIfXArgsNotNull(2, func_get_args(), function($args){
+                return $this->runIfXArgsNotNull(2, func_get_args(), function($args) {
                     $a = $args[0];
                     $b = $args[1];
 
@@ -85,7 +85,7 @@ class Scope
             },
             'inc' => function() {
                 return $this->runIfXArgsNotNull(1, func_get_args(), function($args){
-                     return $args[0] + 1;
+                        return $args[0] + 1;
                 });
             },
             'dec' => function() {
@@ -215,7 +215,7 @@ class Scope
             return false;
         }
 
-        return array_reduce($args, function ($carry, $item) use ($operation) {
+        return array_reduce($args, function($carry, $item) use ($operation) {
             switch ($operation) {
                 case "-":
                     $carry -= $item;

@@ -42,7 +42,7 @@ class Tokeniser
      */
     private function removeEmptyChars($tokens)
     {
-        return array_values(array_filter($tokens, function ($token) {
+        return array_values(array_filter($tokens, function($token) {
             return $token !== '' && $token !== ' ';
         }));
     }

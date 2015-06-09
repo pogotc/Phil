@@ -59,9 +59,9 @@ class Parser
 
         while (($token = $this->peekNextToken()) !== $endToken) {
             if ($this->isUnexpectedToken($token)) {
-                throw new \RuntimeException('Syntax error: expected '.$endToken.', got EOF');
+                throw new \RuntimeException('Syntax error: expected ' . $endToken . ', got EOF');
             }
-            $ast[]= $this->parseNextToken();
+            $ast[] = $this->parseNextToken();
         }
         $this->readNextToken();
         return $ast;
