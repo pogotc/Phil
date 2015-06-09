@@ -79,17 +79,17 @@ class Scope
                 });
             },
             'rem' => function() {
-                return $this->runIfXArgsNotNull(2, func_get_args(), function($args){
+                return $this->runIfXArgsNotNull(2, func_get_args(), function($args) {
                     return $args[0] % $args[1];
                 });
             },
             'inc' => function() {
-                return $this->runIfXArgsNotNull(1, func_get_args(), function($args){
+                return $this->runIfXArgsNotNull(1, func_get_args(), function($args) {
                         return $args[0] + 1;
                 });
             },
             'dec' => function() {
-                return $this->runIfXArgsNotNull(1, func_get_args(), function($args){
+                return $this->runIfXArgsNotNull(1, func_get_args(), function($args) {
                     return $args[0] - 1;
                 });
             },
