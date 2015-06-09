@@ -30,7 +30,7 @@ class Evaluator
 
         if ($this->isList($ast)) {
             return $this->evaluateList($ast);
-        } else if($this->isValidSymbolInScope($ast)) {
+        } else if ($this->isValidSymbolInScope($ast)) {
             return $this->getValueFromScope($ast);
         } else {
             return $ast;
@@ -154,7 +154,7 @@ class Evaluator
             $functionArgs = $ast[2];
             $functionBody = $ast[3];
         }
-        $this->scope[$functionName] = function () use ($functionArgs, $functionBody) {
+        $this->scope[$functionName] = function() use ($functionArgs, $functionBody) {
             $args = func_get_args();
             $localScope = $this->scope->getArrayCopy();
             foreach ($functionArgs as $idx => $namedArg) {
@@ -296,6 +296,6 @@ class Evaluator
      */
     private function generateAnonymousFunctionName()
     {
-        return "__anon__".substr(md5(rand()), 0, 20);
+        return "__anon__" . substr(md5(rand()), 0, 20);
     }
 }

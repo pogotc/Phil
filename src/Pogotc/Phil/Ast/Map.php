@@ -17,7 +17,7 @@ class Map extends \ArrayObject
 
         $map = new Map();
         $listCount = count($list);
-        for ($i = 0; $i < $listCount; $i+=2) {
+        for ($i = 0; $i < $listCount; $i += 2) {
             $key = str_replace('"', '', $list[$i]);
             $value = $list[$i + 1];
             $map[$key] = $value;
